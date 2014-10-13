@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -32,11 +34,13 @@ public class TimetableInterface extends javax.swing.JFrame {
     int tablePosition = -1;
     Set<Module> subjects = new HashSet();
     private DatabaseConnection connection;
+    int tablePosition1 = -1;
 
     public TimetableInterface() {
         try {
             initComponents();
-
+            
+            jTable1.setDefaultRenderer(String.class, new MultiLineCellRenderer());
             connection = new DatabaseConnection();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Database connection problem.\nSet username and password from settings", "Connection problem", JOptionPane.ERROR_MESSAGE);
@@ -61,8 +65,6 @@ public class TimetableInterface extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -84,6 +86,9 @@ public class TimetableInterface extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
 
@@ -91,6 +96,7 @@ public class TimetableInterface extends javax.swing.JFrame {
         setTitle("Time Table Generator");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Generate Timetable for given semester");
@@ -104,24 +110,29 @@ public class TimetableInterface extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Monday", "Tuesday", "Wednsday", "Thursday", "Friday"
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(new Object [][] {
+            {"08.00-09.00", null, null, null, null,null},
+            {"09.00-10.00", null, null, null, null,null},
+            {"10.00-11.00", null, null, null, null,null},
+            {"11.00-12.00", null, null, null, null,null},
+            {"12.00-13.00", null, "     L U N C H", null, "     B R E A K",null},
+            {"13.00-14.00", null, null, null, null,null},
+            {"14.00-15.00", null, null, null, null,null},
+            {"15.00-16.00", null, null, null, null,null},
+            {"16.00-17.00", null, null, null, null,null},
+            {"17.00-18.00", null, null, null, null,null}
+        },
+        new String [] {
+            "Time","Monday", "Tuesday", "Wednsday", "Thursday", "Friday"
+        })
+        {
+            public Class getColumnClass(int columnIndex)
+            {
+                return String.class;
             }
-        ) {
+
             boolean[] canEdit = new boolean [] {
-                true, true, true, true, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -129,8 +140,6 @@ public class TimetableInterface extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTable1);
-
-        jLabel4.setText("Number of lecture rooms:");
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Generate");
@@ -162,14 +171,10 @@ public class TimetableInterface extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addGap(30, 30, 30)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(33, 33, 33)
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(86, 86, 86)
+                                .addGap(354, 354, 354)
                                 .addComponent(jButton1))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(242, Short.MAX_VALUE))
+                        .addContainerGap(238, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -192,12 +197,10 @@ public class TimetableInterface extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addGap(45, 45, 45)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(102, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Generate Timetable", jPanel2);
@@ -324,35 +327,56 @@ public class TimetableInterface extends javax.swing.JFrame {
             }
         });
 
+        jLabel11.setText("Add lecturer:");
+
+        jButton6.setBackground(new java.awt.Color(153, 255, 153));
+        jButton6.setText("Add lecturer");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel9)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap(29, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel11))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                    .addComponent(jTextField5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
-                .addGap(35, 35, 35)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6))
+                .addGap(20, 20, 20)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -415,7 +439,7 @@ public class TimetableInterface extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1120, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,15 +456,21 @@ public class TimetableInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    public void clearTable(JTable table) {
+        jTable1.setRowHeight(16);
+   for (int i = 0; i < table.getRowCount(); i++)
+      for(int j = 1; j < table.getColumnCount(); j++) {
+          table.setValueAt("", i, j);
+      }
+   }
+
+    
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         int sem = Integer.parseInt((String) this.jComboBox1.getSelectedItem());
-        try {
-        int num_rooms = Integer.parseInt(this.jTextField1.getText());
-        }catch(Exception e){
-           JOptionPane.showMessageDialog(this, "Plese enter number of lecture rooms", "Error", JOptionPane.ERROR_MESSAGE); 
-        }
-
+        clearTable(jTable1);
+        System.out.println("Max table"+jTable1.getRowHeight());
         String selectSQL = "SELECT * FROM subject natural join subjectmapping"; //Query to get data
         Connection conn = this.connection.getConnection();
         PreparedStatement data_set = null;
@@ -458,9 +488,9 @@ public class TimetableInterface extends javax.swing.JFrame {
                 int hour = rs.getInt("teachingHour");
                 int semester = rs.getInt("semester");
                 String index = rs.getString("studentIndex");
-                
-                System.out.println("modCode:"+moduleCode+",modName:"+moduleName+", hour:"+hour+", sem:"+semester+",index:"+index);
-                
+
+                System.out.println("modCode:" + moduleCode + ",modName:" + moduleName + ", hour:" + hour + ", sem:" + semester + ",index:" + index);
+
                 if (subject_data.containsKey(moduleCode)) { //Check there are previously added subject
 
                     Subject temp = subject_data.get(moduleCode);
@@ -480,12 +510,67 @@ public class TimetableInterface extends javax.swing.JFrame {
             Logger.getLogger(TimetableInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("after");
-         for(String key: subject_data.keySet()){
-            System.out.println( subject_data.get(key));
-            //studentGrades.remove("Alan");
+
+        ArrayList<Subject> subjectList = new ArrayList<Subject>();
+        for (String key : subject_data.keySet()) {
+            //System.out.println( subject_data.get(key));
+            subjectList.add(subject_data.get(key));
+
         }
- 
-        
+
+        int i = 1, j = 0, time = 0,rowCount=1,maxCount=1;
+        ArrayList<ArrayList<TimeSlot>> table = GraphColoring.createTable(subjectList, sem);
+
+        for (ArrayList<TimeSlot> slots : table) {
+
+            j = 0;
+            if (!slots.isEmpty()) {
+                time = slots.get(0).getStart();
+
+            }
+            System.out.println(slots);
+            for (TimeSlot slot : slots) {
+                System.out.println("="+slot.getSubject().getModuleName());
+                for(int k=slot.getStart()-8;k<slot.getStart()-8+slot.getSubject().getDuration();k++)
+                {
+                    String x = (String) jTable1.getValueAt(k, i);
+                    if (x == null || x.equals("")) {
+                        jTable1.setValueAt(slot.getSubject().getModuleName(), k, i);
+                        //rowCount=1;
+                    } else {
+                        jTable1.setValueAt(x+"\n"+slot.getSubject().getModuleName(), k, i);
+                        rowCount=x.split("\n").length+1;
+                        if(maxCount<rowCount){
+                            maxCount=rowCount;
+                            System.out.println("maxcount---"+maxCount);
+                        }
+                    }
+                }
+                /*if (slot.getStart() == time) {
+                    String x = (String) jTable1.getValueAt(j, i);
+                    if (x == null) {
+                        jTable1.setValueAt(slot.getSubject().getModuleName(), j, i);
+                            
+                    } else {
+                        jTable1.setValueAt(x+" \\ "+slot.getSubject().getModuleName(), j, i);
+                        rowCount++;
+                        if(maxCount<rowCount){
+                            maxCount=rowCount;
+                        }
+                    }
+                } else {
+
+                    jTable1.setValueAt(slot.getSubject().getModuleName(), j+1, i);
+                    time = slot.getStart();
+                    j++;
+                    rowCount=1;
+                }*/
+            }
+            i++;
+        }
+        System.out.println("max"+maxCount); 
+        jTable1.setRowHeight(jTable1.getRowHeight() * maxCount);
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -511,49 +596,49 @@ public class TimetableInterface extends javax.swing.JFrame {
 
         PreparedStatement subjectmapping = null;
         PreparedStatement subject = null;
-        if(model.getRowCount()!=0){
-        try {
-
-            subjectmapping = conn.prepareStatement(query_subjectmapping);
-            subject = conn.prepareStatement(query_subject);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(TimetableInterface.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        for (int i = 0; i <= this.tablePosition; i++) {
+        if (model.getRowCount() != 0) {
             try {
-                //Iterating through the table and saving data
-                System.out.println(model.getValueAt(i, 0) + ":" + model.getValueAt(i, 1));
-                String index = (String) model.getValueAt(i, 0);
-                String module = (String) model.getValueAt(i, 1);
 
-                subjectmapping.setString(1, index);        //Inserting data to map table
-                subjectmapping.setString(2, module);
-                subjectmapping.execute();
+                subjectmapping = conn.prepareStatement(query_subjectmapping);
+                subject = conn.prepareStatement(query_subject);
+
             } catch (SQLException ex) {
                 Logger.getLogger(TimetableInterface.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        }
+            for (int i = 0; i <= this.tablePosition; i++) {
+                try {
+                    //Iterating through the table and saving data
+                    System.out.println(model.getValueAt(i, 0) + ":" + model.getValueAt(i, 1));
+                    String index = (String) model.getValueAt(i, 0);
+                    String module = (String) model.getValueAt(i, 1);
 
-        Iterator iterator = subjects.iterator();
-        while (iterator.hasNext()) {                    //Inserting data to subject table
-            Module mod = (Module) iterator.next();
-            try {
+                    subjectmapping.setString(1, index);        //Inserting data to map table
+                    subjectmapping.setString(2, module);
+                    subjectmapping.execute();
+                } catch (SQLException ex) {
+                    Logger.getLogger(TimetableInterface.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-                subject.setString(1, mod.getCode());
-                subject.setString(2, mod.getName());
-                subject.setInt(3, mod.getHours());
-                subject.setInt(4, mod.getSemester());
-                subject.execute();
-
-            } catch (SQLException ex) {
-                //Logger.getLogger(TimetableInterface.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        JOptionPane.showMessageDialog(this, "Data added successfully", "Data adding", JOptionPane.INFORMATION_MESSAGE);
-        }else{
+
+            Iterator iterator = subjects.iterator();
+            while (iterator.hasNext()) {                    //Inserting data to subject table
+                Module mod = (Module) iterator.next();
+                try {
+
+                    subject.setString(1, mod.getCode());
+                    subject.setString(2, mod.getName());
+                    subject.setInt(3, mod.getHours());
+                    subject.setInt(4, mod.getSemester());
+                    subject.execute();
+
+                } catch (SQLException ex) {
+                    //Logger.getLogger(TimetableInterface.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Data added successfully", "Data adding", JOptionPane.INFORMATION_MESSAGE);
+        } else {
             JOptionPane.showMessageDialog(this, "No data to add", "Data adding", JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -602,6 +687,33 @@ public class TimetableInterface extends javax.swing.JFrame {
         new Settings(this).setVisible(true);
 
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+
+        String moduleCode = jTextField2.getText();
+        String moduleName = jTextField3.getText();
+        String index = jTextField5.getText();
+        int hours = Integer.parseInt((String) this.jComboBox2.getSelectedItem());
+        int sem = Integer.parseInt((String) this.jComboBox3.getSelectedItem());
+
+        if (moduleCode.isEmpty() == false && moduleName.isEmpty() == false && index.isEmpty() == false) {
+
+            subjects.add(new Module(moduleCode, moduleName, sem, hours)); //Adding module to the set
+
+            jTable2.setValueAt(index, ++tablePosition, 0);      //Adding name to table
+            jTable2.setValueAt(moduleCode, tablePosition, 1);      //Adding name to table
+
+            if (tablePosition == jTable1.getRowCount() - 1) {                   //If rows are empty add new one
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                model.addRow(new Object[]{null, null, null});
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Enter all data", "Error in Input", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     void refreshConnection(String table, String user, String pswd) {
         try {
@@ -656,14 +768,15 @@ public class TimetableInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -680,9 +793,9 @@ public class TimetableInterface extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
 }

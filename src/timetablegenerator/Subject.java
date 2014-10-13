@@ -68,7 +68,7 @@ public class Subject {
     }
     
     public String toString(){
-        return this.moduleName+" : "+this.moduleCode+":"+this.duration+": "+this.semester+"size :"+participants.size();
+        return this.moduleName+" : "+this.moduleCode+":"+this.duration+": "+this.semester+"size :"+participants;
                 
     }
     
