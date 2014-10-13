@@ -460,7 +460,9 @@ public class TimetableInterface extends javax.swing.JFrame {
         jTable1.setRowHeight(16);
    for (int i = 0; i < table.getRowCount(); i++)
       for(int j = 1; j < table.getColumnCount(); j++) {
-          table.setValueAt("", i, j);
+          if(i!=4)
+            table.setValueAt("", i, j);
+          
       }
    }
 
@@ -535,10 +537,10 @@ public class TimetableInterface extends javax.swing.JFrame {
                 {
                     String x = (String) jTable1.getValueAt(k, i);
                     if (x == null || x.equals("")) {
-                        jTable1.setValueAt(slot.getSubject().getModuleName(), k, i);
+                        jTable1.setValueAt(slot.getSubject().getModuleCode()+" "+slot.getSubject().getModuleName(), k, i);
                         //rowCount=1;
                     } else {
-                        jTable1.setValueAt(x+"\n"+slot.getSubject().getModuleName(), k, i);
+                        jTable1.setValueAt(x+"\n"+slot.getSubject().getModuleCode()+" "+slot.getSubject().getModuleName(), k, i);
                         rowCount=x.split("\n").length+1;
                         if(maxCount<rowCount){
                             maxCount=rowCount;

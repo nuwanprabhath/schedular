@@ -16,6 +16,7 @@ import java.util.Set;
 public class GraphColoring {
     
     private static ArrayList<Node> graph = new ArrayList<Node>();
+    private final static int DOMAIN_SIZE=22;
 //    
 //    public static void main(String[] args) {
 //        test2();
@@ -270,7 +271,7 @@ public class GraphColoring {
         {
             Set<Integer> domain = new HashSet();
         
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= DOMAIN_SIZE; i++) {
                 domain.add(i);
             }
             graph.add(new Node(sub,domain));
